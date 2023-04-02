@@ -4,7 +4,7 @@
 ####################################################################################################
 import customtkinter
 import tkinter
-
+from datetime import datetime
 ####################################################################################################
 #### Set properties of window
 ####################################################################################################
@@ -23,11 +23,20 @@ root.geometry("320x480")
 taskbar = customtkinter.CTkFrame(root, height = 60)
 taskbar.pack(side='top', fill='x')
 
-timeLabel = customtkinter.CTkLabel(taskbar, text = "13:09", font = ("Roboto", 18))
+timeLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
 timeLabel.pack(side='left', padx=10)
 
-dateLabel = customtkinter.CTkLabel(taskbar, text = "02/04/2023", font = ("Roboto", 18))
+dateLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
 dateLabel.pack(side='right', padx=10)
+
+def update():
+    now = datetime.now()
+    currentTime = now.strftime("%H:%M")
+    currentDate = now.strftime("%d/%m/%Y")
+    timeLabel.configure(text=currentTime)
+    dateLabel.configure(text=currentDate)
+    root.after(1000, update)
+
 
 ####################################################################################################
 #### Greeting WILL CHANGE DEPENDING ON THE TIME OF DAY
@@ -62,4 +71,5 @@ prayerButton.place(x=50, y=320)
 lightControlButton = customtkinter.CTkButton(root, text="Light\nControl", height = 75, width = 90, font = ("Roberto", 18))
 lightControlButton.place(x=180, y=320)
 
+update()
 root.mainloop()
