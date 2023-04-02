@@ -4,7 +4,7 @@
 ####################################################################################################
 import customtkinter
 import tkinter
-from datetime import datetime
+from datetime import datetime, time
 ####################################################################################################
 #### Set properties of window
 ####################################################################################################
@@ -17,8 +17,7 @@ root.geometry("320x480")
 #root.attributes('-fullscreen', True)
 
 ####################################################################################################
-#### Code for the taskbar, contains a timer and the current date. NEED TO ADD
-### CODE SO THAT TIME AND DATE ARE  CURRENT
+#### Code for the taskbar, contains a timer and the current date.
 ####################################################################################################
 taskbar = customtkinter.CTkFrame(root, height = 60)
 taskbar.pack(side='top', fill='x')
@@ -27,7 +26,14 @@ timeLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
 timeLabel.pack(side='left', padx=10)
 
 dateLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
-dateLabel.pack(side='right', padx=10)
+dateLabel.pack(side='right', padx=10)  
+
+####################################################################################################
+#### Greeting changes depending on the time of day.
+####################################################################################################
+greetingLabel = customtkinter.CTkLabel(root, text = "", font = ("Roboto", 23))
+greetingLabel.pack(side='top', pady=15)
+
 
 def update():
     now = datetime.now()
@@ -37,13 +43,9 @@ def update():
     dateLabel.configure(text=currentDate)
     root.after(1000, update)
 
-
-####################################################################################################
-#### Greeting WILL CHANGE DEPENDING ON THE TIME OF DAY
-####################################################################################################
-greetingLabel = customtkinter.CTkLabel(root, text = "Good Morning!", font = ("Roboto", 23))
-greetingLabel.pack(side='top', pady=15)
-
+    if (now.time() < time(12,00)): greetingLabel.configure(text="Good morning!")
+    elif (now.time() >= time(12,00) and now.time() < time(18,30)): greetingLabel.configure(text="Good afternoon!")
+    else: greetingLabel.configure(text="Good evening!")
 ####################################################################################################
 #### Frame for the temperature and humidity sensor, values are taken from DHT
 ### sensor connected to RPI. MUST BE ADDED.
