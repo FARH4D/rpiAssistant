@@ -16,7 +16,7 @@ class prayerTimes(customtkinter.CTkFrame):
         url = "https://muslimsalat.p.rapidapi.com/Birmingham%20UK.json"
 
         headers = {
-            'X-RapidAPI-Key': '7c4399cbb8mshc6776560803561dp1d8886jsne00717970db2',
+            'X-RapidAPI-Key': 'get your own api key buddy',
             'X-RapidAPI-Host': 'muslimsalat.p.rapidapi.com'
         }
 
@@ -61,30 +61,32 @@ class prayerTimes(customtkinter.CTkFrame):
         fajrFrame.pack(side='top', pady=15)
         fajrFrame.grid_propagate(False)
 
-        fajrLabel = customtkinter.CTkLabel(fajrFrame, text = "Fajr:", font = ("Roboto", 18))
-        fajrTime = customtkinter.CTkLabel(fajrFrame, text = times["fajr"],  font = ("Roboto", 18))
+        fajrLabel = customtkinter.CTkLabel(fajrFrame, text = "Fajr:         " + times["fajr"], font = ("Roboto", 18))
         fajrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
-        fajrTime.grid(row=0, column = 5, padx = (130, 0), pady=9)
+
+
+        sunriseFrame = customtkinter.CTkFrame(master, width=250, height=45)
+        sunriseFrame.pack(side='top', pady=15)
+        sunriseFrame.grid_propagate(False)
+
+        sunriseLabel = customtkinter.CTkLabel(sunriseFrame, text = "Sunrise:        " + times["shurooq"], font = ("Roboto", 18))
+        sunriseLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
 
 
         dhuhrFrame = customtkinter.CTkFrame(master, width=250, height=45)
         dhuhrFrame.pack(side='top', pady=15)
         dhuhrFrame.grid_propagate(False)
 
-        dhuhrLabel = customtkinter.CTkLabel(dhuhrFrame, text = "Dhuhr:", font = ("Roboto", 18))
-        dhuhrTime = customtkinter.CTkLabel(dhuhrFrame, text = times["dhuhr"],  font = ("Roboto", 18))
+        dhuhrLabel = customtkinter.CTkLabel(dhuhrFrame, text = "Dhuhr:          " + times["dhuhr"], font = ("Roboto", 18))
         dhuhrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
-        dhuhrTime.grid(row=0, column = 5, padx = (110, 0), pady=9)
 
 
         asrFrame = customtkinter.CTkFrame(master, width=250, height=45)
         asrFrame.pack(side='top', pady=15)
         asrFrame.grid_propagate(False)
 
-        asrLabel = customtkinter.CTkLabel(asrFrame, text = "Asr:", font = ("Roboto", 18))
-        asrTime = customtkinter.CTkLabel(asrFrame, text = times["asr"],  font = ("Roboto", 18))
-        asrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)    
-        asrTime.grid(row=0, column = 5, padx = (131, 0), pady=9)
+        asrLabel = customtkinter.CTkLabel(asrFrame, text = "Asr:        " + times["asr"], font = ("Roboto", 18))
+        asrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
 
 
         maghribFrame = customtkinter.CTkFrame(master, width=250, height=45)
@@ -93,19 +95,16 @@ class prayerTimes(customtkinter.CTkFrame):
 
         maghribLabel = customtkinter.CTkLabel(maghribFrame, text = "Maghrib:", font = ("Roboto", 18))
         maghribTime = customtkinter.CTkLabel(maghribFrame, text = times["maghrib"],  font = ("Roboto", 18))
-        maghribTime.grid(row=0, column = 5, padx = (90, 0), pady=9)
         maghribLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+        maghribTime.grid(row=0, column = 5, padx = (90, 0), pady=9)
 
 
         ishaFrame = customtkinter.CTkFrame(master, width=250, height=45)
         ishaFrame.pack(side='top', pady=15)
         ishaFrame.grid_propagate(False)
 
-        ishaLabel = customtkinter.CTkLabel(ishaFrame, text = "Isha:", font = ("Roboto", 18))
-        ishaTime = customtkinter.CTkLabel(ishaFrame, text = times["isha"],  font = ("Roboto", 18))
+        ishaLabel = customtkinter.CTkLabel(ishaFrame, text = "Isha:         " + times["isha"], font = ("Roboto", 18))
         ishaLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
-        ishaTime.grid(row=0, column = 5, padx = (123, 0), pady=9)
-
 
         update()
         master.mainloop()
