@@ -8,10 +8,6 @@ from datetime import datetime, time
 
 from calendarPy import calendarMenu
 from prayerTimes import prayerTimes
-import sys
-import speech_recognition as sr
-import pyttsx3
-from neuralintents import GenericAssistant
 
 ####################################################################################################
 #### Set properties of window
@@ -102,29 +98,6 @@ prayerButton = customtkinter.CTkButton(root, text="Prayer\nTimes", height = 75, 
 prayerButton.place(x=50, y=320)
 lightControlButton = customtkinter.CTkButton(root, text="Light\nControl", height = 75, width = 90, font = ("Roberto", 18))
 lightControlButton.place(x=180, y=320)
-
-
-r = sr.Recognizer()
-engine = pyttsx3.init()
-engine.setProperty('rate', 150)
-
-while True:
-
-    try:
-        with sr.Microphone(device_index=0) as mic:
-            r.adjust_for_ambient_noise(mic, duration=0.2)
-            audio = r.listen(mic)
-            print("Waiting for your input")
-            message = r.recognize_google(audio)
-            message = message.lower()
-
-        engine.say("I hear you")
-        engine.runAndWait()
-
-    except sr.UnknownValueError:
-        r = sr.Recognizer()
-
-
 
 update()
 root.mainloop()
