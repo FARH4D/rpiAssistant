@@ -101,5 +101,3 @@ lightControlButton.place(x=180, y=320)
 
 update()
 root.mainloop()
-
-
