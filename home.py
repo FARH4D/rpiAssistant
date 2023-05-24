@@ -86,6 +86,7 @@ def openPrayer():
     piHoleButton.place_forget()
     prayerButton.place_forget()
     lightControlButton.place_forget()
+    intervalButton.place_forget()
     prayerTimes(root)
 
 
@@ -98,6 +99,9 @@ prayerButton = customtkinter.CTkButton(root, text="Prayer\nTimes", height = 75, 
 prayerButton.place(x=50, y=320)
 lightControlButton = customtkinter.CTkButton(root, text="Light\nControl", height = 75, width = 90, font = ("Roberto", 18))
 lightControlButton.place(x=180, y=320)
+
+intervalButton = customtkinter.CTkButton(root, text="Interval Timer", height = 60, width = 220, font = ("Roberto", 18), command=lambda: openPrayer())
+intervalButton.place(x=50, y=410)
 
 update()
 root.mainloop()
