@@ -1,5 +1,5 @@
 import customtkinter
-import tkinter
+from tkinter import *
 from datetime import datetime, time
 import requests
 import json
@@ -10,16 +10,23 @@ class prayerTimes(customtkinter.CTkFrame):
     def __init__(self, master):
         self.master = master
         self.master.geometry("320x480")
-        self.master.title("Home Assistant") 
+        self.master.title("Home Assistant")
 
 ############################################################################################################
 ############ Code for the taskbar, contains a timer and the current date.                               ####
 ############################################################################################################
-        taskbar = customtkinter.CTkFrame(self.master, height = 60)
-        taskbar.pack(side='top', fill='x')
+        self.taskbar = customtkinter.CTkFrame(self.master, height = 60)
+        self.taskbar.pack(side='top', fill='x')
 
         self.timeLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
         self.timeLabel.pack(side='left', padx=10)
+
+        self.homeIcon = PhotoImage(file='rpiAssistant/images/homeIcon.png')
+
+        self.homeButton = customtkinter.CTkButton(self.root, image=self.homeIcon, text = "", command=lambda: self.goHome())
+        self.homeButton.configure(height=20, width=20)
+        self.homeButton.place(x= 140, y = 0)
+
 
         self.dateLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
         self.dateLabel.pack(side='right', padx=10)
@@ -87,57 +94,57 @@ class prayerTimes(customtkinter.CTkFrame):
 
 
     def packTimes(self):
-        titleLabel = customtkinter.CTkLabel(self.master, text = "PRAYER TIMES", font = ("Roboto", 23))
-        titleLabel.pack(side='top', pady=15)
+        self.titleLabel = customtkinter.CTkLabel(self.master, text = "PRAYER TIMES", font = ("Roboto", 23))
+        self.titleLabel.pack(side='top', pady=15)
 
-        fajrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
-        fajrFrame.pack(side='top', pady=15)
-        fajrFrame.grid_propagate(False)
+        self.fajrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.fajrFrame.pack(side='top', pady=15)
+        self.fajrFrame.grid_propagate(False)
 
-        fajrLabel = customtkinter.CTkLabel(fajrFrame, text = "Fajr:", font = ("Roboto", 18))
-        fajrTime = customtkinter.CTkLabel(fajrFrame, text = self.timesParsed["fajr"],  font = ("Roboto", 18))
-        fajrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
-        fajrTime.grid(row=0, column = 5, padx = (130, 0), pady=9)
-
-
-        dhuhrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
-        dhuhrFrame.pack(side='top', pady=15)
-        dhuhrFrame.grid_propagate(False)
-
-        dhuhrLabel = customtkinter.CTkLabel(dhuhrFrame, text = "Dhuhr:", font = ("Roboto", 18))
-        dhuhrTime = customtkinter.CTkLabel(dhuhrFrame, text = self.timesParsed["dhuhr"],  font = ("Roboto", 18))
-        dhuhrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
-        dhuhrTime.grid(row=0, column = 5, padx = (110, 0), pady=9)
+        self.fajrLabel = customtkinter.CTkLabel(self.fajrFrame, text = "Fajr:", font = ("Roboto", 18))
+        self.fajrTime = customtkinter.CTkLabel(self.fajrFrame, text = self.timesParsed["fajr"],  font = ("Roboto", 18))
+        self.fajrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+        self.fajrTime.grid(row=0, column = 5, padx = (130, 0), pady=9)
 
 
-        asrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
-        asrFrame.pack(side='top', pady=15)
-        asrFrame.grid_propagate(False)
+        self.dhuhrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.dhuhrFrame.pack(side='top', pady=15)
+        self.dhuhrFrame.grid_propagate(False)
 
-        asrLabel = customtkinter.CTkLabel(asrFrame, text = "Asr:", font = ("Roboto", 18))
-        asrTime = customtkinter.CTkLabel(asrFrame, text = self.timesParsed["asr"],  font = ("Roboto", 18))
-        asrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)    
-        asrTime.grid(row=0, column = 5, padx = (131, 0), pady=9)
-
-
-        maghribFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
-        maghribFrame.pack(side='top', pady=15)
-        maghribFrame.grid_propagate(False)
-
-        maghribLabel = customtkinter.CTkLabel(maghribFrame, text = "Maghrib:", font = ("Roboto", 18))
-        maghribTime = customtkinter.CTkLabel(maghribFrame, text = self.timesParsed["magrib"],  font = ("Roboto", 18))
-        maghribTime.grid(row=0, column = 5, padx = (90, 0), pady=9)
-        maghribLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+        self.dhuhrLabel = customtkinter.CTkLabel(self.dhuhrFrame, text = "Dhuhr:", font = ("Roboto", 18))
+        self.dhuhrTime = customtkinter.CTkLabel(self.dhuhrFrame, text = self.timesParsed["dhuhr"],  font = ("Roboto", 18))
+        self.dhuhrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+        self.dhuhrTime.grid(row=0, column = 5, padx = (110, 0), pady=9)
 
 
-        ishaFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
-        ishaFrame.pack(side='top', pady=15)
-        ishaFrame.grid_propagate(False)
+        self.asrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.asrFrame.pack(side='top', pady=15)
+        self.asrFrame.grid_propagate(False)
 
-        ishaLabel = customtkinter.CTkLabel(ishaFrame, text = "Isha:", font = ("Roboto", 18))
-        ishaTime = customtkinter.CTkLabel(ishaFrame, text = self.timesParsed["isha"],  font = ("Roboto", 18))
-        ishaLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
-        ishaTime.grid(row=0, column = 5, padx = (123, 0), pady=9)
+        self.asrLabel = customtkinter.CTkLabel(self.asrFrame, text = "Asr:", font = ("Roboto", 18))
+        self.asrTime = customtkinter.CTkLabel(self.asrFrame, text = self.timesParsed["asr"],  font = ("Roboto", 18))
+        self.asrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)    
+        self.asrTime.grid(row=0, column = 5, padx = (131, 0), pady=9)
+
+
+        self.maghribFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.maghribFrame.pack(side='top', pady=15)
+        self.maghribFrame.grid_propagate(False)
+
+        self.maghribLabel = customtkinter.CTkLabel(self.maghribFrame, text = "Maghrib:", font = ("Roboto", 18))
+        self.maghribTime = customtkinter.CTkLabel(self.maghribFrame, text = self.timesParsed["magrib"],  font = ("Roboto", 18))
+        self.maghribTime.grid(row=0, column = 5, padx = (90, 0), pady=9)
+        self.maghribLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+
+
+        self.ishaFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.ishaFrame.pack(side='top', pady=15)
+        self.ishaFrame.grid_propagate(False)
+
+        self.ishaLabel = customtkinter.CTkLabel(self.ishaFrame, text = "Isha:", font = ("Roboto", 18))
+        self.ishaTime = customtkinter.CTkLabel(self.ishaFrame, text = self.timesParsed["isha"],  font = ("Roboto", 18))
+        self.ishaLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+        self.ishaTime.grid(row=0, column = 5, padx = (123, 0), pady=9)
     
     def noInternet(self):
         self.wifiLabel.destroy()
@@ -149,3 +156,17 @@ class prayerTimes(customtkinter.CTkFrame):
         jsonTimes = open('rpiAssistant/prayerTimes.json')
         self.timesParsed = json.load(jsonTimes)
         self.packTimes()
+
+    def goHome(self):
+        self.taskbar.destroy()
+        self.titleLabel.destroy()
+        self.fajrFrame.destroy()
+        self.fajrLabel.destroy()
+        self.dhuhrFrame.destroy()
+        self.dhuhrLabel.destroy()
+        self.asrFrame.destroy()
+        self.asrLabel.destroy()
+        self.maghribFrame.destroy()
+        self.maghribLabel.destroy()
+        self.ishaFrame.destroy()
+        self.ishaLabel.destroy()

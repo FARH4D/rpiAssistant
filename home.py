@@ -3,7 +3,7 @@
 #### Specifically written for my LCD touchscreen optimised for 320x480 resolution               ####
 ####################################################################################################
 import customtkinter
-import tkinter
+from tkinter import *
 from datetime import datetime, time
 
 from calendarPy import calendarMenu
@@ -33,8 +33,17 @@ class home(customtkinter.CTkFrame):
         self.taskbar = customtkinter.CTkFrame(self.root, height = 60)
         self.taskbar.pack(side='top', fill='x')
 
+        self.homeIcon = PhotoImage(file='rpiAssistant/images/homeIcon.png')
+
+        self.homeButton = customtkinter.CTkButton(self.root, image=self.homeIcon, text = "")
+        self.homeButton.configure(height=20, width=20)
+        self.homeButton.place(x= 140, y = 0)
+
         self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
         self.timeLabel.pack(side='left', padx=10)
+
+        # self.home = customtkinter.CTkButton(self.taskbar, text = "home")
+        # self.home.place(x = 120, y = 0)
 
         self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
         self.dateLabel.pack(side='right', padx=10)  
