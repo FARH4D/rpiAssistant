@@ -5,10 +5,8 @@
 import customtkinter
 from tkinter import *
 from datetime import datetime, time
-
-from calendarPy import calendarMenu
-from prayerTimes import prayerTimes
-from intervalTimer import intervalTimer
+import subprocess
+import sys
 
 
 
@@ -89,37 +87,13 @@ class home(customtkinter.CTkFrame):
     #### Buttons for different menus
     ####################################################################################################
     def openCalendar(self):
-        self.taskbar.pack_forget()
-        self.greetingLabel.pack_forget()
-        self.rectFrame.place_forget()
-        self.calendarButton.place_forget()
-        self.piHoleButton.place_forget()
-        self.prayerButton.place_forget()
-        self.lightControlButton.place_forget()
-        self.intervalButton.place_forget()
-        calendarMenu(self.root)
+        subprocess.call([sys.executable, 'rpiAssistant/calendarPy.py'])
 
     def openPrayer(self):
-        self.taskbar.pack_forget()
-        self.greetingLabel.pack_forget()
-        self.rectFrame.place_forget()
-        self.calendarButton.place_forget()
-        self.piHoleButton.place_forget()
-        self.prayerButton.place_forget()
-        self.lightControlButton.place_forget()
-        self.intervalButton.place_forget()
-        prayerTimes(self.root)
+        subprocess.call([sys.executable, 'rpiAssistant/prayerTimes.py'])
 
     def openInterval(self):
-        self.taskbar.pack_forget()
-        self.greetingLabel.pack_forget()
-        self.rectFrame.place_forget()
-        self.calendarButton.place_forget()
-        self.piHoleButton.place_forget()
-        self.prayerButton.place_forget()
-        self.lightControlButton.place_forget()
-        self.intervalButton.place_forget()
-        intervalTimer(self.root)
+        subprocess.call([sys.executable, 'rpiAssistant/intervalTimer.py'])
 
     def createButtons(self):
 

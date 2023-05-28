@@ -11,6 +11,7 @@ class prayerTimes(customtkinter.CTkFrame):
         self.master = master
         self.master.geometry("320x480")
         self.master.title("Home Assistant")
+        #self.master.attributes('-fullscreen', True)
 
 ############################################################################################################
 ############ Code for the taskbar, contains a timer and the current date.                               ####
@@ -18,17 +19,17 @@ class prayerTimes(customtkinter.CTkFrame):
         self.taskbar = customtkinter.CTkFrame(self.master, height = 60)
         self.taskbar.pack(side='top', fill='x')
 
-        self.timeLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
+        self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
         self.timeLabel.pack(side='left', padx=10)
 
         self.homeIcon = PhotoImage(file='rpiAssistant/images/homeIcon.png')
 
-        self.homeButton = customtkinter.CTkButton(self.root, image=self.homeIcon, text = "", command=lambda: self.goHome())
+        self.homeButton = customtkinter.CTkButton(self.taskbar, image=self.homeIcon, text = "", command=lambda: self.goHome())
         self.homeButton.configure(height=20, width=20)
         self.homeButton.place(x= 140, y = 0)
 
 
-        self.dateLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
+        self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
         self.dateLabel.pack(side='right', padx=10)
 
         try:
@@ -158,15 +159,11 @@ class prayerTimes(customtkinter.CTkFrame):
         self.packTimes()
 
     def goHome(self):
-        self.taskbar.destroy()
-        self.titleLabel.destroy()
-        self.fajrFrame.destroy()
-        self.fajrLabel.destroy()
-        self.dhuhrFrame.destroy()
-        self.dhuhrLabel.destroy()
-        self.asrFrame.destroy()
-        self.asrLabel.destroy()
-        self.maghribFrame.destroy()
-        self.maghribLabel.destroy()
-        self.ishaFrame.destroy()
-        self.ishaLabel.destroy()
+        self.master.destroy()
+
+    def run(self):
+        self.master.mainloop()
+
+root = customtkinter.CTk()
+prayTimes = prayerTimes(root)
+prayTimes.run()

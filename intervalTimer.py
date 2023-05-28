@@ -16,20 +16,20 @@ class intervalTimer(customtkinter.CTkFrame):
 ############################################################################################################
 ############ Code for the taskbar, contains a timer and the current date.                               ####
 ############################################################################################################
-        taskbar = customtkinter.CTkFrame(self.master, height = 60)
-        taskbar.pack(side='top', fill='x')
+        self.taskbar = customtkinter.CTkFrame(self.master, height = 60)
+        self.taskbar.pack(side='top', fill='x')
 
-        self.timeLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
+        self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
         self.timeLabel.pack(side='left', padx=10)
 
         self.homeIcon = PhotoImage(file='rpiAssistant/images/homeIcon.png')
 
-        self.homeButton = customtkinter.CTkButton(self.root, image=self.homeIcon, text = "")
+        self.homeButton = customtkinter.CTkButton(self.taskbar, image=self.homeIcon, text = "", command=lambda: self.goHome())
         self.homeButton.configure(height=20, width=20)
         self.homeButton.place(x= 140, y = 0)
 
 
-        self.dateLabel = customtkinter.CTkLabel(taskbar, text = "", font = ("Roboto", 18))
+        self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
         self.dateLabel.pack(side='right', padx=10)
 
         self.update()
@@ -60,3 +60,13 @@ class intervalTimer(customtkinter.CTkFrame):
         self.timer4.place(x = 60, y = 250)
         self.timer5 = customtkinter.CTkButton(self.master, text = " Custom \n Time", height = 75, width = 80, font = ("Roboto", 23))
         self.timer5.place(x = 180, y = 250)
+
+    def goHome(self):
+        self.master.destroy()
+
+    def run(self):
+        self.master.mainloop()
+
+root = customtkinter.CTk()
+interval = intervalTimer(root)
+interval.run()
