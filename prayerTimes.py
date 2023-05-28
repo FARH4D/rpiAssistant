@@ -8,6 +8,9 @@ from urllib import request
 class prayerTimes(customtkinter.CTkFrame):
     
     def __init__(self, master):
+        
+        customtkinter.set_appearance_mode("dark")
+        customtkinter.set_default_color_theme("dark-blue")
         self.master = master
         self.master.geometry("320x480")
         self.master.title("Home Assistant")
