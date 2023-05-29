@@ -64,9 +64,9 @@ class intervalTimer(customtkinter.CTkFrame):
         self.intervalList[index] = value
 
     def packButtons(self):
-        self.timer1 = customtkinter.CTkButton(self.master, text = "1:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, 1.0))
+        self.timer1 = customtkinter.CTkButton(self.master, text = "1:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "01:00"))
         self.timer1.place(x = -15, y = 90, in_= self.container, anchor = "center")
-        self.timer2 = customtkinter.CTkButton(self.master, text = "3:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, 3.0))
+        self.timer2 = customtkinter.CTkButton(self.master, text = "3:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "3:00"))
         self.timer2.place(x = 85, y = 90, in_= self.container, anchor = "center")
         self.timer3 = customtkinter.CTkButton(self.master, text = "Custom", height = 60, width = 80, font = ("Roboto", 23))
         self.timer3.place(x = 190, y = 90, in_= self.container, anchor = "center")
@@ -107,6 +107,28 @@ class intervalTimer(customtkinter.CTkFrame):
         self.master.after(1000, lambda: self.startTimeLabel.configure(text= "2"))
         self.master.after(2000, lambda: self.startTimeLabel.configure(text= "1"))
         self.master.after(3000, lambda: self.startTimeLabel.configure(text= "STARTING"))
+        self.master.after(4000, self.timerStarted)
+
+    def timerStarted(self):
+        self.startLabel.destroy()
+        self.startTimeLabel.destroy()
+
+        countdownNums = str(self.intervalList[0]).split(":", 1)
+
+        self.countdownNum = (int(countdownNums[0]) * 60) + (int(countdownNums[1]))
+
+        self.currentTime = customtkinter.CTkLabel(self.master, text = self.intervalList[0], font = ("Roboto", 23))
+        self.currentTime.pack(side='top', pady=15)
+        
+        self.countdown()
+
+    def countdown(self):
+        if self.countdownNum >= 0:
+            self.currentTime.configure(text=self.countdownNum)
+            self.countdownNum -= 1
+            self.master.after(1000, self.countdown)
+        else:
+            self.currentTime.configure(text="FINISHED")
 
     def rebuild(self):
         self.packItems()
