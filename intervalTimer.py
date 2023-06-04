@@ -16,8 +16,6 @@ class intervalTimer(customtkinter.CTkFrame):
 
         self.intervalList = [None] * 3
 
-        self.updateCycle = True
-
         self.packItems()
         self.update()
         self.packButtons()
@@ -37,6 +35,7 @@ class intervalTimer(customtkinter.CTkFrame):
 ############ Code for the taskbar, contains a timer and the current date.                               ####
 ############################################################################################################
     def packItems(self):
+        self.updateCycle = True
         self.taskbar = customtkinter.CTkFrame(self.master, height = 60)
         self.taskbar.pack(side='top', fill='x')
 
@@ -66,7 +65,7 @@ class intervalTimer(customtkinter.CTkFrame):
         self.timer1.place(x = -15, y = 90, in_= self.container, anchor = "center")
         self.timer2 = customtkinter.CTkButton(self.master, text = "3:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "3:00"))
         self.timer2.place(x = 85, y = 90, in_= self.container, anchor = "center")
-        self.timer3 = customtkinter.CTkButton(self.master, text = "Custom", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.enterCustom())
+        self.timer3 = customtkinter.CTkButton(self.master, text = "Custom", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.enterCustom("timer"))
         self.timer3.place(x = 190, y = 90, in_= self.container, anchor = "center")
 
         self.roundsLabel = customtkinter.CTkLabel(self.master, text = "ROUNDS", font = ("Roboto", 20))
@@ -75,7 +74,7 @@ class intervalTimer(customtkinter.CTkFrame):
         self.rounds1.place(x = -15, y = 210, in_= self.container, anchor = "center")
         self.rounds2 = customtkinter.CTkButton(self.master, text = "3", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(1, 3))
         self.rounds2.place(x = 85, y = 210, in_= self.container, anchor = "center")
-        self.rounds3 = customtkinter.CTkButton(self.master, text = "Custom", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.enterCustom)
+        self.rounds3 = customtkinter.CTkButton(self.master, text = "Custom", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.enterCustom("rounds"))
         self.rounds3.place(x = 190, y = 210, in_= self.container, anchor = "center")
 
         self.restLabel = customtkinter.CTkLabel(self.master, text = "REST PERIODS", font = ("Roboto", 20))
@@ -84,7 +83,7 @@ class intervalTimer(customtkinter.CTkFrame):
         self.rest1.place(x = -15, y = 325, in_= self.container, anchor = "center")
         self.rest2 = customtkinter.CTkButton(self.master, text = "30", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(2, "00:30"))
         self.rest2.place(x = 85, y = 325, in_= self.container, anchor = "center")
-        self.rest3 = customtkinter.CTkButton(self.master, text = "Custom", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.enterCustom)
+        self.rest3 = customtkinter.CTkButton(self.master, text = "Custom", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.enterCustom("timer"))
         self.rest3.place(x = 190, y = 325, in_= self.container, anchor = "center")
 
         self.startButton = customtkinter.CTkButton(self.master, text = "Start", height = 60, width = 100, font = ("Roboto", 25), command=lambda: self.startTimer())
@@ -94,7 +93,7 @@ class intervalTimer(customtkinter.CTkFrame):
         self.updateCycle = False
         self.taskbar.destroy()
         self.container.destroy()
-        print()
+        print(str(self.intervalList[0]) + " " + str(self.intervalList[1]) + " " + str(self.intervalList[2]))
         self.startLabel = customtkinter.CTkLabel(self.master, text = "TIMER STARTING IN", font = ("Roboto", 23))
         self.startLabel.pack(side='top', pady=15)
         self.startTimeLabel = customtkinter.CTkLabel(self.master, text = "3", font = ("Roboto", 23))
@@ -128,23 +127,29 @@ class intervalTimer(customtkinter.CTkFrame):
         else:
             self.currentTime.configure(text="FINISHED")
 
-    def enterCustom(self):
+    def enterCustom(self, type):
 
+        self.type = type
         self.pointer = 0
         self.updateCycle = False
         self.taskbar.destroy()
         self.container.destroy()
 
         self.customTimer = [0, 0, 0, 0]
-
+        
         self.customContainer = customtkinter.CTkFrame(self.master)
         self.customContainer.pack(side='top')
 
         self.customTitle = customtkinter.CTkLabel(self.master, text = "ENTER A TIME", font = ("Roboto", 23))
         self.customTitle.pack(side='top', pady=15, in_= self.customContainer, anchor = "center")
 
-        self.customNumDisplay = customtkinter.CTkLabel(self.master, text = "00:00", font = ("Roboto", 40))
+        self.customNumDisplay = customtkinter.CTkLabel(self.master, text = "", font = ("Roboto", 40))
         self.customNumDisplay.place(x = 72, y = 100, in_= self.customContainer, anchor = "center")
+
+        if type == "timer":
+            self.customNumDisplay.configure(text = "00:00")
+        else:
+            self.customNumDisplay.configure(text = "00")
 
         self.num1 = customtkinter.CTkButton(self.master, text = "1", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.addCustom(1))
         self.num1.place(x = -27, y = 180, in_= self.customContainer, anchor = "center")
@@ -175,32 +180,52 @@ class intervalTimer(customtkinter.CTkFrame):
         self.deleteNum.place(x = 178, y = 435, in_= self.customContainer, anchor = "center")
 
     def addCustom(self, number):
-        if self.pointer > 3:
-            pass
+        if self.type == "timer":
+            if self.pointer > 3:
+                pass
+            else:
+                self.customTimer[self.pointer] = number
+                self.pointer += 1
+                self.customNumDisplay.configure(text = str(self.customTimer[0]) + str(self.customTimer[1]) + ":" + str(self.customTimer[2]) + str(self.customTimer[3]))
         else:
-            self.customTimer[self.pointer] = number
-            self.pointer += 1
-            self.customNumDisplay.configure(text = "" + str(self.customTimer[0]) + str(self.customTimer[1]) + ":" + str(self.customTimer[2]) + str(self.customTimer[3]))
+            if self.pointer > 1:
+                pass
+            else:
+                self.customTimer[self.pointer] = number
+                self.pointer += 1
+                self.customNumDisplay.configure(text = str(self.customTimer[0]) + str(self.customTimer[1]))
     
     def removeCustom(self):
-        if self.pointer < 0:
-            pass
+        if self.type == "timer":
+            if self.pointer - 1 < 0:
+                self.pointer = 0
+            else:
+                self.pointer -= 1
+                self.customTimer[self.pointer] = 0
+                self.customNumDisplay.configure(text = str(self.customTimer[0]) + str(self.customTimer[1]) + ":" + str(self.customTimer[2]) + str(self.customTimer[3]))
         else:
             if self.pointer - 1 < 0:
                 self.pointer = 0
             else:
                 self.pointer -= 1
-            self.customTimer[self.pointer] = 0
-            self.customNumDisplay.configure(text = str(self.customTimer[0]) + str(self.customTimer[1]) + ":" + str(self.customTimer[2]) + str(self.customTimer[3]))
+                self.customTimer[self.pointer] = 0
+                self.customNumDisplay.configure(text = str(self.customTimer[0]) + str(self.customTimer[1]))
+            
     
     def confirmCustom(self):
-        customTimerLocal = str(str(self.customTimer[0]) + str(self.customTimer[1]) + ":" + str(self.customTimer[2]) + str(self.customTimer[3]))
-        self.assignValue(0, customTimerLocal)
+        if self.type == "timer":
+            customTimerLocal = str(str(self.customTimer[0]) + str(self.customTimer[1]) + ":" + str(self.customTimer[2]) + str(self.customTimer[3]))
+            self.assignValue(0, customTimerLocal)
+        else:
+            customRoundsLocal = int(str(self.customTimer[0]) + str(self.customTimer[1]))
+            self.assignValue(1, customRoundsLocal)
+        self.customContainer.destroy()
+        self.rebuild()
 
     def rebuild(self):
         self.packItems()
+        self.update()
         self.packButtons()
-        self.updateCycle = True
 
     def goHome(self):
         self.master.destroy()
