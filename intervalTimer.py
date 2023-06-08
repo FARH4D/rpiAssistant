@@ -52,15 +52,17 @@ class intervalTimer(customtkinter.CTkFrame):
         self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
         self.dateLabel.pack(side='right', padx=10)
 
-        self.container = customtkinter.CTkFrame(self.master)
-        self.container.pack(side='top')
-        self.titleLabel = customtkinter.CTkLabel(self.master, text = "INTERVAL TIMER", font = ("Roboto", 23))
-        self.titleLabel.pack(side='top', pady=15, in_= self.container, anchor = "center")
+
 
     def assignValue(self, index, value):
         self.intervalList[index] = value
 
     def packButtons(self):
+        self.container = customtkinter.CTkFrame(self.master)
+        self.container.pack(side='top')
+        self.titleLabel = customtkinter.CTkLabel(self.master, text = "INTERVAL TIMER", font = ("Roboto", 23))
+        self.titleLabel.pack(side='top', pady=15, in_= self.container, anchor = "center")
+
         self.timer1 = customtkinter.CTkButton(self.master, text = "1:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "1:00"))
         self.timer1.place(x = -15, y = 90, in_= self.container, anchor = "center")
         self.timer2 = customtkinter.CTkButton(self.master, text = "3:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "3:00"))
@@ -109,33 +111,48 @@ class intervalTimer(customtkinter.CTkFrame):
     def timerStarted(self):
         self.startLabel.destroy()
         self.startTimeLabel.destroy()
+        self.packItems()
+        self.homeButton.destroy()
+        self.update()
 
         countdownNums = str(self.intervalList[0]).split(":", 1)
 
         self.countdownNum = (int(countdownNums[0]) * 60) + (int(countdownNums[1]))
 
-        self.currentTime = customtkinter.CTkLabel(self.master, text = self.intervalList[0], font = ("Roboto", 23))
-        self.currentTime.pack(side='top', pady=15)
-        self.currentTime2 = customtkinter.CTkLabel(self.master, text = self.intervalList[0], font = ("Roboto", 23))
-        self.currentTime2.pack(side='top', pady=15)
-        
-        self.countdown()
+        self.currentTime = customtkinter.CTkLabel(self.master, text = self.intervalList[0], font = ("Roboto", 45))
+        self.currentTime.pack(side='top', pady=120)
 
-    def countdown(self):
-        if self.countdownNum >= 0:
-            self.currentTime.configure(text=self.countdownNum)
-            self.setTimerLabel()
-            self.countdownNum -= 1
-            self.master.after(1000, self.countdown)
+        self.endTimer = customtkinter.CTkButton(self.master, text = "Finish", height = 20, width = 110, font = ("Roboto", 29), command=lambda: self.endEarly())
+        self.endTimer.pack(side='top')
+        
+        self.countdown(self.countdownNum)
+
+    def countdown(self, time):
+        if time >= 0:
+            self.currentTime.configure(text=time)
+            self.setTimerLabel(time)
+            time -= 1
+            self.master.after(1000, lambda: self.countdown(time))
         else:
             self.currentTime.configure(text="FINISHED")
 
-    def setTimerLabel(self):
-        mins = int(self.countdownNum / 60)
-        secs = (self.countdownNum  - (mins * 60)) % 60
+    def rest(self):
+        self.countdown(self.intervalList[2])
+        
 
-        self.currentTime2.configure(text = "{:02d}".format(mins) + ":" + "{:02d}".format(secs))
+    def setTimerLabel(self, time):
+        mins = int(time / 60)
+        secs = (time  - (mins * 60)) % 60
 
+        self.currentTime.configure(text = "{:02d}".format(mins) + ":" + "{:02d}".format(secs))
+
+    def endEarly(self):
+
+        self.currentTime.destroy()
+        self.endTimer.destroy()
+        self.taskbar.destroy()
+        self.updateCycle = False
+        self.rebuild()
 
     def enterCustom(self, type):
 
