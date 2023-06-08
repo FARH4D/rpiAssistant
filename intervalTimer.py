@@ -133,13 +133,8 @@ class intervalTimer(customtkinter.CTkFrame):
     def setTimerLabel(self):
         mins = int(self.countdownNum / 60)
         secs = (self.countdownNum  - (mins * 60)) % 60
-        
-        if secs == 0:
-            self.currentTime2.configure(text = str(mins) + ":00")
-        elif secs < 10:
-            self.currentTime2.configure(text = str(mins) + ":0" + str(secs))
-        else:
-            self.currentTime2.configure(text = str(mins) + ":" + str(secs))
+
+        self.currentTime2.configure(text = "{:02d}".format(mins) + ":" + "{:02d}".format(secs))
 
 
     def enterCustom(self, type):
