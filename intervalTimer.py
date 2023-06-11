@@ -12,7 +12,7 @@ class intervalTimer(customtkinter.CTkFrame):
         self.master = master
         self.master.geometry("320x480")
         self.master.title("Home Assistant")
-        #self.root.attributes('-fullscreen', True)
+        #self.master.attributes('-fullscreen', True)
 
         self.intervalList = [None] * 3
 
@@ -63,7 +63,7 @@ class intervalTimer(customtkinter.CTkFrame):
         self.titleLabel = customtkinter.CTkLabel(self.master, text = "INTERVAL TIMER", font = ("Roboto", 23))
         self.titleLabel.pack(side='top', pady=15, in_= self.container, anchor = "center")
 
-        self.timer1 = customtkinter.CTkButton(self.master, text = "1:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "1:00"))
+        self.timer1 = customtkinter.CTkButton(self.master, text = "1:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "0:03"))
         self.timer1.place(x = -15, y = 90, in_= self.container, anchor = "center")
         self.timer2 = customtkinter.CTkButton(self.master, text = "3:00", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(0, "3:00"))
         self.timer2.place(x = 85, y = 90, in_= self.container, anchor = "center")
@@ -81,7 +81,7 @@ class intervalTimer(customtkinter.CTkFrame):
 
         self.restLabel = customtkinter.CTkLabel(self.master, text = "REST PERIODS", font = ("Roboto", 20))
         self.restLabel.place(x = 90 , y = 270, in_= self.container, anchor = "center")
-        self.rest1 = customtkinter.CTkButton(self.master, text = "15", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(2, "00:15"))
+        self.rest1 = customtkinter.CTkButton(self.master, text = "15", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(2, "00:02"))
         self.rest1.place(x = -15, y = 325, in_= self.container, anchor = "center")
         self.rest2 = customtkinter.CTkButton(self.master, text = "30", height = 60, width = 80, font = ("Roboto", 23), command=lambda: self.assignValue(2, "00:30"))
         self.rest2.place(x = 85, y = 325, in_= self.container, anchor = "center")
@@ -115,9 +115,7 @@ class intervalTimer(customtkinter.CTkFrame):
         self.homeButton.destroy()
         self.update()
 
-        countdownNums = str(self.intervalList[0]).split(":", 1)
-
-        self.countdownNum = (int(countdownNums[0]) * 60) + (int(countdownNums[1]))
+        self.countdownNum = self.calculateTime(self.intervalList[0])
 
         self.currentTime = customtkinter.CTkLabel(self.master, text = self.intervalList[0], font = ("Roboto", 45))
         self.currentTime.pack(side='top', pady=120)
@@ -126,6 +124,12 @@ class intervalTimer(customtkinter.CTkFrame):
         self.endTimer.pack(side='top')
         
         self.countdown(self.countdownNum)
+        self.resting = False
+
+    def calculateTime(self, time):
+        formattedTime = str(time).split(":", 1)
+        realTime = (int(formattedTime[0]) * 60) + (int(formattedTime[1]))
+        return realTime
 
     def countdown(self, time):
         if time >= 0:
@@ -134,10 +138,25 @@ class intervalTimer(customtkinter.CTkFrame):
             time -= 1
             self.master.after(1000, lambda: self.countdown(time))
         else:
-            self.currentTime.configure(text="FINISHED")
+            if self.resting == True:
+                self.resting = False
+                self.restLabel.destroy()
+                self.countdown(self.countdownNum)
+            else:
+                if self.intervalList[1] > 1:
+                    self.rest()
+                    self.intervalList[1] -= 1
+                else:
+                    self.currentTime.configure(text = "FINISHED")
+            
 
     def rest(self):
-        self.countdown(self.intervalList[2])
+        self.resting = True
+        self.restTime = self.calculateTime(self.intervalList[2])
+        self.countdown(self.restTime)
+
+        self.restLabel = customtkinter.CTkLabel(self.master, text = "REST PERIOD", font = ("Roboto", 30))
+        self.restLabel.place(x = 70, y = 40)
         
 
     def setTimerLabel(self, time):

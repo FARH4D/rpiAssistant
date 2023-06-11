@@ -8,8 +8,6 @@ from datetime import datetime, time
 import subprocess
 import sys
 
-
-
 class home(customtkinter.CTkFrame):
 
     def __init__(self, root):
@@ -68,7 +66,6 @@ class home(customtkinter.CTkFrame):
 
         self.update()
 
-
     def update(self):
         now = datetime.now()
         currentTime = now.strftime("%H:%M")
@@ -80,8 +77,6 @@ class home(customtkinter.CTkFrame):
         if (now.time() < time(12,00)): self.greetingLabel.configure(text="Good morning!")
         elif (now.time() >= time(12,00) and now.time() < time(18,30)): self.greetingLabel.configure(text="Good afternoon!")
         else: self.greetingLabel.configure(text="Good evening!")
-
-
 
     ####################################################################################################
     #### Buttons for different menus
@@ -97,19 +92,18 @@ class home(customtkinter.CTkFrame):
 
     def createButtons(self):
 
-        self.calendarButton = customtkinter.CTkButton(self.root, text="Calendar", height = 75, width = 90, font = ("Roberto", 18), command=lambda: self.openCalendar())
+        self.calendarButton = customtkinter.CTkButton(self.root, text="Calendar", height = 75, width = 90, font = ("Roboto", 18), command=lambda: self.openCalendar())
         self.calendarButton.place(x=50, y=220)
-        self.piHoleButton = customtkinter.CTkButton(self.root, text="Pi-Hole", height = 75, width = 90, font = ("Roberto", 18))
+        self.piHoleButton = customtkinter.CTkButton(self.root, text="Pi-Hole", height = 75, width = 90, font = ("Roboto", 18))
         self.piHoleButton.place(x=180, y=220)
 
-        self.prayerButton = customtkinter.CTkButton(self.root, text="Prayer\nTimes", height = 75, width = 90, font = ("Roberto", 18), command=lambda: self.openPrayer())
+        self.prayerButton = customtkinter.CTkButton(self.root, text="Prayer\nTimes", height = 75, width = 90, font = ("Roboto", 18), command=lambda: self.openPrayer())
         self.prayerButton.place(x=50, y=320)
-        self.lightControlButton = customtkinter.CTkButton(self.root, text="Light\nControl", height = 75, width = 90, font = ("Roberto", 18))
+        self.lightControlButton = customtkinter.CTkButton(self.root, text="Light\nControl", height = 75, width = 90, font = ("Roboto", 18))
         self.lightControlButton.place(x=180, y=320)
 
-        self.intervalButton = customtkinter.CTkButton(self.root, text="Interval Timer", height = 60, width = 220, font = ("Roberto", 18), command=lambda: self.openInterval())
+        self.intervalButton = customtkinter.CTkButton(self.root, text="Interval Timer", height = 60, width = 220, font = ("Roboto", 18), command=lambda: self.openInterval())
         self.intervalButton.place(x=50, y=410)
-
 
     def run(self):
         self.createButtons()
