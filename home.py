@@ -1,6 +1,6 @@
 ####################################################################################################
 #### My home assistant.                                                                         ####
-#### Specifically written for my LCD touchscreen optimised for 320x480 resolution               ####
+#### Specifically written for my LCD touchscreen optimised for 768x1024 resolution              ####
 ####################################################################################################
 import customtkinter
 from tkinter import *
@@ -20,49 +20,47 @@ class home(customtkinter.CTkFrame):
 
         self.root = root
         self.root.title("Home Assistant")
-        self.root.geometry("320x480")
+        self.root.geometry("768x1024")
         #self.root.attributes('-fullscreen', True)
 
     ####################################################################################################
     #### Code for the taskbar, contains a timer and the current date.
     ####################################################################################################
-        self.taskbar = customtkinter.CTkFrame(self.root, height = 60)
+        self.taskbar = customtkinter.CTkFrame(self.root, height = 180)
         self.taskbar.pack(side='top', fill='x')
 
-        self.homeIcon = PhotoImage(file='rpiAssistant/images/homeIcon.png')
+        self.homeIcon = PhotoImage(file='images/homeIcon.png')
 
         self.homeButton = customtkinter.CTkButton(self.root, image=self.homeIcon, text = "")
-        self.homeButton.configure(height=20, width=20)
-        self.homeButton.place(x= 140, y = 0)
+        self.homeButton.configure(height=30, width=30)
+        self.homeButton.place(x= 355, y = 0)
 
-        self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
+        self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
         self.timeLabel.pack(side='left', padx=10)
 
-        # self.home = customtkinter.CTkButton(self.taskbar, text = "home")
-        # self.home.place(x = 120, y = 0)
 
-        self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
+        self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
         self.dateLabel.pack(side='right', padx=10)  
 
         ####################################################################################################
         #### Greeting changes depending on the time of day.
         ####################################################################################################
-        self.greetingLabel = customtkinter.CTkLabel(self.root, text = "", font = ("Roboto", 23))
+        self.greetingLabel = customtkinter.CTkLabel(self.root, text = "", font = ("Roboto", 35))
         self.greetingLabel.pack(side='top', pady=15)
 
     ####################################################################################################
     #### Frame for the temperature and humidity sensor, values are taken from DHT
     #### sensor connected to RPI. MUST BE ADDED.
     ####################################################################################################
-        self.rectFrame = customtkinter.CTkFrame(self.root, width=250, height=75)
-        self.rectFrame.place(relx=0.5, rely=0.3, anchor='center')
+        self.rectFrame = customtkinter.CTkFrame(self.root, width=500, height=100)
+        self.rectFrame.pack(side='top', pady = '50')
         self.rectFrame.grid_propagate(False) # Prevents size of rectangle from being reduced when adding
 
-        self.tempLabel = customtkinter.CTkLabel(self.rectFrame, text = "Temperature: ", font = ("Roboto", 18))
-        self.humidLabel = customtkinter.CTkLabel(self.rectFrame, text = "Humidity: ", font = ("Roboto", 18))
+        self.tempLabel = customtkinter.CTkLabel(self.rectFrame, text = "Temperature: ", font = ("Roboto", 30))
+        self.humidLabel = customtkinter.CTkLabel(self.rectFrame, text = "Humidity: ", font = ("Roboto", 30))
 
-        self.tempLabel.grid(row=0, column = 0, padx = (10, 0))
-        self.humidLabel.grid(row=1, column = 0, pady = (10, 0))
+        self.tempLabel.grid(row=0, column = 0, padx = (15,0), pady = (10,0))
+        self.humidLabel.grid(row=1, column = 0)
 
         self.update()
 
@@ -82,28 +80,28 @@ class home(customtkinter.CTkFrame):
     #### Buttons for different menus
     ####################################################################################################
     def openCalendar(self):
-        subprocess.call([sys.executable, 'rpiAssistant/calendarPy.py'])
+        subprocess.call([sys.executable, 'calendarPy.py'])
 
     def openPrayer(self):
-        subprocess.call([sys.executable, 'rpiAssistant/prayerTimes.py'])
+        subprocess.call([sys.executable, 'prayerTimes.py'])
 
     def openInterval(self):
-        subprocess.call([sys.executable, 'rpiAssistant/intervalTimer.py'])
+        subprocess.call([sys.executable, 'intervalTimer.py'])
 
     def createButtons(self):
 
-        self.calendarButton = customtkinter.CTkButton(self.root, text="Calendar", height = 75, width = 90, font = ("Roboto", 18), command=lambda: self.openCalendar())
-        self.calendarButton.place(x=50, y=220)
-        self.piHoleButton = customtkinter.CTkButton(self.root, text="Pi-Hole", height = 75, width = 90, font = ("Roboto", 18))
-        self.piHoleButton.place(x=180, y=220)
+        self.calendarButton = customtkinter.CTkButton(self.root, text="Calendar", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openCalendar())
+        self.calendarButton.place(x=200, y=320)
+        self.piHoleButton = customtkinter.CTkButton(self.root, text="Pi-Hole", height = 100, width = 120, font = ("Roboto", 29))
+        self.piHoleButton.place(x=450, y=320)
 
-        self.prayerButton = customtkinter.CTkButton(self.root, text="Prayer\nTimes", height = 75, width = 90, font = ("Roboto", 18), command=lambda: self.openPrayer())
-        self.prayerButton.place(x=50, y=320)
-        self.lightControlButton = customtkinter.CTkButton(self.root, text="Light\nControl", height = 75, width = 90, font = ("Roboto", 18))
-        self.lightControlButton.place(x=180, y=320)
+        self.prayerButton = customtkinter.CTkButton(self.root, text="Prayer\nTimes", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openPrayer())
+        self.prayerButton.place(x=200, y=470)
+        self.lightControlButton = customtkinter.CTkButton(self.root, text="Light\nControl", height = 100, width = 120, font = ("Roboto", 29))
+        self.lightControlButton.place(x=450, y=470)
 
-        self.intervalButton = customtkinter.CTkButton(self.root, text="Interval Timer", height = 60, width = 220, font = ("Roboto", 18), command=lambda: self.openInterval())
-        self.intervalButton.place(x=50, y=410)
+        self.intervalButton = customtkinter.CTkButton(self.root, text="Interval Timer", height = 60, width = 300, font = ("Roboto", 29), command=lambda: self.openInterval())
+        self.intervalButton.place(x=235, y=620)
 
     def run(self):
         self.createButtons()

@@ -12,27 +12,27 @@ class prayerTimes(customtkinter.CTkFrame):
         customtkinter.set_appearance_mode("dark")
         customtkinter.set_default_color_theme("dark-blue")
         self.master = master
-        self.master.geometry("320x480")
+        self.master.geometry("768x1024")
         self.master.title("Home Assistant")
         #self.master.attributes('-fullscreen', True)
 
 ############################################################################################################
 ############ Code for the taskbar, contains a timer and the current date.                               ####
 ############################################################################################################
-        self.taskbar = customtkinter.CTkFrame(self.master, height = 60)
+        self.taskbar = customtkinter.CTkFrame(self.master, height = 180)
         self.taskbar.pack(side='top', fill='x')
 
-        self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
+        self.homeIcon = PhotoImage(file='images/homeIcon.png')
+
+        self.homeButton = customtkinter.CTkButton(self.master, image=self.homeIcon, text = "")
+        self.homeButton.configure(height=30, width=30)
+        self.homeButton.place(x= 355, y = 0)
+
+        self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
         self.timeLabel.pack(side='left', padx=10)
 
-        self.homeIcon = PhotoImage(file='rpiAssistant/images/homeIcon.png')
 
-        self.homeButton = customtkinter.CTkButton(self.taskbar, image=self.homeIcon, text = "", command=lambda: self.goHome())
-        self.homeButton.configure(height=20, width=20)
-        self.homeButton.place(x= 140, y = 0)
-
-
-        self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 18))
+        self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
         self.dateLabel.pack(side='right', padx=10)
 
         try:
@@ -62,7 +62,7 @@ class prayerTimes(customtkinter.CTkFrame):
 ############################################################################################################
 ############################################################################################################
     def requestData(self):
-        jsonTimes = open('rpiAssistant/prayerTimes.json')
+        jsonTimes = open('prayerTimes.json')
         self.timesParsed = json.load(jsonTimes)
 
         if datetime.today().date() > datetime.strptime(self.timesParsed["date"], '%Y-%m-%d').date():
@@ -80,10 +80,10 @@ class prayerTimes(customtkinter.CTkFrame):
                 self.errorLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
                 
             else:
-                with open ("rpiAssistant/prayerTimes.json", "w") as jsonTimes:
+                with open ("prayerTimes.json", "w") as jsonTimes:
                     json.dump(data, jsonTimes)
                 print("Made API call successfully")
-                jsonTimes = open('rpiAssistant/prayerTimes.json')
+                jsonTimes = open('prayerTimes.json')
                 self.timesParsed = json.load(jsonTimes)
                 self.packTimes()
         else: self.packTimes()
@@ -157,7 +157,7 @@ class prayerTimes(customtkinter.CTkFrame):
         self.wifiFrame2.destroy()
         print("Removed error labels")
 
-        jsonTimes = open('rpiAssistant/prayerTimes.json')
+        jsonTimes = open('prayerTimes.json')
         self.timesParsed = json.load(jsonTimes)
         self.packTimes()
 
