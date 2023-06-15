@@ -7,6 +7,7 @@ from tkinter import *
 from datetime import datetime, time
 import subprocess
 import sys
+import Adafruit_DHT
 
 class home(customtkinter.CTkFrame):
 
@@ -48,6 +49,18 @@ class home(customtkinter.CTkFrame):
         self.greetingLabel = customtkinter.CTkLabel(self.root, text = "", font = ("Roboto", 35))
         self.greetingLabel.pack(side='top', pady=15)
 
+        sensor = Adafruit_DHT.DHT11
+        pin = 4
+
+        humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+
+        if humidity is not None and temperature is not None:
+            print(f"Temperature: {temperature}°C")
+            print(f"Humidity: {humidity}%")
+        else:
+            print("Failed to retrieve data from DHT11 sensor.")
+        
+
     ####################################################################################################
     #### Frame for the temperature and humidity sensor, values are taken from DHT
     #### sensor connected to RPI. MUST BE ADDED.
@@ -56,8 +69,8 @@ class home(customtkinter.CTkFrame):
         self.rectFrame.pack(side='top', pady = '50')
         self.rectFrame.grid_propagate(False) # Prevents size of rectangle from being reduced when adding
 
-        self.tempLabel = customtkinter.CTkLabel(self.rectFrame, text = "Temperature: ", font = ("Roboto", 30))
-        self.humidLabel = customtkinter.CTkLabel(self.rectFrame, text = "Humidity: ", font = ("Roboto", 30))
+        self.tempLabel = customtkinter.CTkLabel(self.rectFrame, text = f"Temperature:  {temperature}°C", font = ("Roboto", 30))
+        self.humidLabel = customtkinter.CTkLabel(self.rectFrame, text = f"Humidity: {humidity}%", font = ("Roboto", 30))
 
         self.tempLabel.grid(row=0, column = 0, padx = (15,0), pady = (10,0))
         self.humidLabel.grid(row=1, column = 0)
