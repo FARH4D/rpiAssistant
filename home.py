@@ -7,6 +7,7 @@ from tkinter import *
 from datetime import datetime, time
 import subprocess
 import sys
+import piir
 import Adafruit_DHT
 
 class home(customtkinter.CTkFrame):
@@ -49,16 +50,17 @@ class home(customtkinter.CTkFrame):
         self.greetingLabel = customtkinter.CTkLabel(self.root, text = "", font = ("Roboto", 35))
         self.greetingLabel.pack(side='top', pady=15)
 
-        sensor = Adafruit_DHT.DHT11
-        pin = 4
+ 
+        # sensor = Adafruit_DHT.DHT11
+        # pin = 4
 
-        humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+        # humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
-        if humidity is not None and temperature is not None:
-            print(f"Temperature: {temperature}°C")
-            print(f"Humidity: {humidity}%")
-        else:
-            print("Failed to retrieve data from DHT11 sensor.")
+        # if humidity is not None and temperature is not None:
+        #     print(f"Temperature: {temperature}°C")
+        #     print(f"Humidity: {humidity}%")
+        # else:
+        #     print("Failed to retrieve data from DHT11 sensor.")
         
 
     ####################################################################################################
@@ -69,11 +71,11 @@ class home(customtkinter.CTkFrame):
         self.rectFrame.pack(side='top', pady = '50')
         self.rectFrame.grid_propagate(False) # Prevents size of rectangle from being reduced when adding
 
-        self.tempLabel = customtkinter.CTkLabel(self.rectFrame, text = f"Temperature:  {temperature}°C", font = ("Roboto", 30))
-        self.humidLabel = customtkinter.CTkLabel(self.rectFrame, text = f"Humidity: {humidity}%", font = ("Roboto", 30))
+        # self.tempLabel = customtkinter.CTkLabel(self.rectFrame, text = f"Temperature:  {temperature}°C", font = ("Roboto", 30))
+        # self.humidLabel = customtkinter.CTkLabel(self.rectFrame, text = f"Humidity: {humidity}%", font = ("Roboto", 30))
 
-        self.tempLabel.grid(row=0, column = 0, padx = (15,0), pady = (10,0))
-        self.humidLabel.grid(row=1, column = 0)
+        # self.tempLabel.grid(row=0, column = 0, padx = (15,0), pady = (10,0))
+        # self.humidLabel.grid(row=1, column = 0)
 
         self.update()
 
@@ -101,6 +103,11 @@ class home(customtkinter.CTkFrame):
     def openInterval(self):
         subprocess.call([sys.executable, 'intervalTimer.py'])
 
+    def lightsOn(self):
+        remote = piir.Remote('light.json', 27)
+        remote.send('Power')
+        print("Signal sent.")
+
     def createButtons(self):
 
         self.calendarButton = customtkinter.CTkButton(self.root, text="Calendar", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openCalendar())
@@ -110,7 +117,7 @@ class home(customtkinter.CTkFrame):
 
         self.prayerButton = customtkinter.CTkButton(self.root, text="Prayer\nTimes", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openPrayer())
         self.prayerButton.place(x=200, y=470)
-        self.lightControlButton = customtkinter.CTkButton(self.root, text="Light\nControl", height = 100, width = 120, font = ("Roboto", 29))
+        self.lightControlButton = customtkinter.CTkButton(self.root, text="Light\nControl", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.lightsOn())
         self.lightControlButton.place(x=450, y=470)
 
         self.intervalButton = customtkinter.CTkButton(self.root, text="Interval Timer", height = 60, width = 300, font = ("Roboto", 29), command=lambda: self.openInterval())

@@ -41,7 +41,7 @@ class intervalTimer(customtkinter.CTkFrame):
 
         self.homeIcon = PhotoImage(file='images/homeIcon.png')
 
-        self.homeButton = customtkinter.CTkButton(self.taskbar, image=self.homeIcon, text = "")
+        self.homeButton = customtkinter.CTkButton(self.taskbar, image=self.homeIcon, text = "", command=lambda: self.goHome())
         self.homeButton.configure(height=30, width=30)
         self.homeButton.place(x= 355, y = 0)
 
