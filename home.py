@@ -94,8 +94,9 @@ class home(customtkinter.CTkFrame):
     ####################################################################################################
     #### Buttons for different menus
     ####################################################################################################
-    def openCalendar(self):
-        subprocess.call([sys.executable, 'calendarPy.py'])
+    def openTracker(self):
+        # subprocess.call([sys.executable, 'fitnessTracker.py'])
+        pass
 
     def openPrayer(self):
         subprocess.call([sys.executable, 'prayerTimes.py'])
@@ -103,22 +104,23 @@ class home(customtkinter.CTkFrame):
     def openInterval(self):
         subprocess.call([sys.executable, 'intervalTimer.py'])
 
-    def lightsOn(self):
-        remote = piir.Remote('light.json', 27)
+    def openDevices(self):
+        subprocess.call([sys.executable, 'deviceControl.py'])
+        """ remote = piir.Remote('light.json', 27)
         remote.send('Power')
-        print("Signal sent.")
+        print("Signal sent.") """
 
     def createButtons(self):
 
-        self.calendarButton = customtkinter.CTkButton(self.root, text="Calendar", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openCalendar())
-        self.calendarButton.place(x=200, y=320)
+        self.fitnessButton = customtkinter.CTkButton(self.root, text="Fitness\nTracker", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openTracker())
+        self.fitnessButton.place(x=200, y=320)
         self.piHoleButton = customtkinter.CTkButton(self.root, text="Pi-Hole", height = 100, width = 120, font = ("Roboto", 29))
         self.piHoleButton.place(x=450, y=320)
 
         self.prayerButton = customtkinter.CTkButton(self.root, text="Prayer\nTimes", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openPrayer())
         self.prayerButton.place(x=200, y=470)
-        self.lightControlButton = customtkinter.CTkButton(self.root, text="Light\nControl", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.lightsOn())
-        self.lightControlButton.place(x=450, y=470)
+        self.deviceButton = customtkinter.CTkButton(self.root, text="Device\nControl", height = 100, width = 120, font = ("Roboto", 29), command=lambda: self.openDevices())
+        self.deviceButton.place(x=450, y=470)
 
         self.intervalButton = customtkinter.CTkButton(self.root, text="Interval Timer", height = 60, width = 300, font = ("Roboto", 29), command=lambda: self.openInterval())
         self.intervalButton.place(x=235, y=620)
