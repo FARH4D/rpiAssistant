@@ -1,63 +1,64 @@
-import customtkinter
+import customtkinter as ctk
 from tkinter import *
 from datetime import datetime, time
 import requests
 import json
 from urllib import request
 
-class prayerTimes(customtkinter.CTkFrame):
+class prayerTimes(ctk.CTkFrame):
     
-    def __init__(self, master):
+    def __init__(self, master, back_callback):
         
-        customtkinter.set_appearance_mode("dark")
-        customtkinter.set_default_color_theme("dark-blue")
+        super().__init__(master)
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("dark-blue")
         self.master = master
-        self.master.geometry("768x1024")
-        self.master.title("Home Assistant")
+        self.back_callback = back_callback
         #self.master.attributes('-fullscreen', True)
+        self.packItems()
+        self.update()
 
 ############################################################################################################
 ############ Code for the taskbar, contains a timer and the current date.                               ####
 ############################################################################################################
-        self.taskbar = customtkinter.CTkFrame(self.master, height = 180)
+    def packItems(self):
+        self.updateCycle = True
+        self.taskbar = ctk.CTkFrame(self.master, height = 180)
         self.taskbar.pack(side='top', fill='x')
 
         self.homeIcon = PhotoImage(file='images/homeIcon.png')
 
-        self.homeButton = customtkinter.CTkButton(self.master, image=self.homeIcon, text = "", command=lambda: self.goHome())
+        self.homeButton = ctk.CTkButton(self.taskbar, image=self.homeIcon, text = "", command=lambda: self.back_to_home())
         self.homeButton.configure(height=30, width=30)
-        self.homeButton.place(x= 355, y = 0)
+        self.homeButton.place(x= 355, y = 0, in_=self.taskbar)
 
-        self.timeLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
+        self.timeLabel = ctk.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
         self.timeLabel.pack(side='left', padx=10)
 
-
-        self.dateLabel = customtkinter.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
-        self.dateLabel.pack(side='right', padx=10)
+        self.dateLabel = ctk.CTkLabel(self.taskbar, text = "", font = ("Roboto", 29))
+        self.dateLabel.pack(side='right', padx=10) 
 
         try:
             request.urlopen('https://www.google.co.uk', timeout=1)
             self.requestData()
         except request.URLError as err: 
             print("No Internet connection")
-            self.wifiFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+            self.wifiFrame = ctk.CTkFrame(self.master, width=250, height=45)
             self.wifiFrame.pack(side='top', pady=15)
             self.wifiFrame.grid_propagate(False)
 
-            self.wifiLabel = customtkinter.CTkLabel(self.wifiFrame, text = "NO INTERNET CONNECTION.", font = ("Roboto", 18))
+            self.wifiLabel = ctk.CTkLabel(self.wifiFrame, text = "NO INTERNET CONNECTION.", font = ("Roboto", 18))
             self.wifiLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
 
-            self.wifiFrame2 = customtkinter.CTkFrame(self.master, width=310, height=45)
+            self.wifiFrame2 = ctk.CTkFrame(self.master, width=310, height=45)
             self.wifiFrame2.pack(side='top', pady=20)
             self.wifiFrame2.grid_propagate(False)
 
-            self.wifiLabel2 = customtkinter.CTkLabel(self.wifiFrame2, text = "SHOWING LAST GATHERED TIMES.", font = ("Roboto", 18))
+            self.wifiLabel2 = ctk.CTkLabel(self.wifiFrame2, text = "SHOWING LAST GATHERED TIMES.", font = ("Roboto", 18))
             self.wifiLabel2.grid(row=0, column = 0, padx = (10, 0), pady=9)
 
             self.master.after(4000, self.noInternet)
-        
-        self.update()
-        self.master.mainloop()
+
     
 ############################################################################################################
 ############################################################################################################
@@ -72,11 +73,11 @@ class prayerTimes(customtkinter.CTkFrame):
 
             if "error" in data:
                 print("Error with API call.")
-                errorFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+                errorFrame = ctk.CTkFrame(self.master, width=250, height=45)
                 errorFrame.pack(side='top', pady=15)
                 errorFrame.grid_propagate(False)
 
-                self.errorLabel = customtkinter.CTkLabel(errorFrame, text = "ERROR. API CALL FAILED.", font = ("Roboto", 18))
+                self.errorLabel = ctk.CTkLabel(errorFrame, text = "ERROR. API CALL FAILED.", font = ("Roboto", 18))
                 self.errorLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
                 
             else:
@@ -98,55 +99,55 @@ class prayerTimes(customtkinter.CTkFrame):
 
 
     def packTimes(self):
-        self.titleLabel = customtkinter.CTkLabel(self.master, text = "PRAYER TIMES", font = ("Roboto", 23))
+        self.titleLabel = ctk.CTkLabel(self.master, text = "PRAYER TIMES", font = ("Roboto", 23))
         self.titleLabel.pack(side='top', pady=15)
 
-        self.fajrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.fajrFrame = ctk.CTkFrame(self.master, width=250, height=45)
         self.fajrFrame.pack(side='top', pady=15)
         self.fajrFrame.grid_propagate(False)
 
-        self.fajrLabel = customtkinter.CTkLabel(self.fajrFrame, text = "Fajr:", font = ("Roboto", 18))
-        self.fajrTime = customtkinter.CTkLabel(self.fajrFrame, text = self.timesParsed["fajr"],  font = ("Roboto", 18))
+        self.fajrLabel = ctk.CTkLabel(self.fajrFrame, text = "Fajr:", font = ("Roboto", 18))
+        self.fajrTime = ctk.CTkLabel(self.fajrFrame, text = self.timesParsed["fajr"],  font = ("Roboto", 18))
         self.fajrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
         self.fajrTime.grid(row=0, column = 5, padx = (130, 0), pady=9)
 
 
-        self.dhuhrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.dhuhrFrame = ctk.CTkFrame(self.master, width=250, height=45)
         self.dhuhrFrame.pack(side='top', pady=15)
         self.dhuhrFrame.grid_propagate(False)
 
-        self.dhuhrLabel = customtkinter.CTkLabel(self.dhuhrFrame, text = "Dhuhr:", font = ("Roboto", 18))
-        self.dhuhrTime = customtkinter.CTkLabel(self.dhuhrFrame, text = self.timesParsed["dhuhr"],  font = ("Roboto", 18))
+        self.dhuhrLabel = ctk.CTkLabel(self.dhuhrFrame, text = "Dhuhr:", font = ("Roboto", 18))
+        self.dhuhrTime = ctk.CTkLabel(self.dhuhrFrame, text = self.timesParsed["dhuhr"],  font = ("Roboto", 18))
         self.dhuhrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
         self.dhuhrTime.grid(row=0, column = 5, padx = (110, 0), pady=9)
 
 
-        self.asrFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.asrFrame = ctk.CTkFrame(self.master, width=250, height=45)
         self.asrFrame.pack(side='top', pady=15)
         self.asrFrame.grid_propagate(False)
 
-        self.asrLabel = customtkinter.CTkLabel(self.asrFrame, text = "Asr:", font = ("Roboto", 18))
-        self.asrTime = customtkinter.CTkLabel(self.asrFrame, text = self.timesParsed["asr"],  font = ("Roboto", 18))
+        self.asrLabel = ctk.CTkLabel(self.asrFrame, text = "Asr:", font = ("Roboto", 18))
+        self.asrTime = ctk.CTkLabel(self.asrFrame, text = self.timesParsed["asr"],  font = ("Roboto", 18))
         self.asrLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)    
         self.asrTime.grid(row=0, column = 5, padx = (131, 0), pady=9)
 
 
-        self.maghribFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.maghribFrame = ctk.CTkFrame(self.master, width=250, height=45)
         self.maghribFrame.pack(side='top', pady=15)
         self.maghribFrame.grid_propagate(False)
 
-        self.maghribLabel = customtkinter.CTkLabel(self.maghribFrame, text = "Maghrib:", font = ("Roboto", 18))
-        self.maghribTime = customtkinter.CTkLabel(self.maghribFrame, text = self.timesParsed["magrib"],  font = ("Roboto", 18))
+        self.maghribLabel = ctk.CTkLabel(self.maghribFrame, text = "Maghrib:", font = ("Roboto", 18))
+        self.maghribTime = ctk.CTkLabel(self.maghribFrame, text = self.timesParsed["magrib"],  font = ("Roboto", 18))
         self.maghribTime.grid(row=0, column = 5, padx = (90, 0), pady=9)
         self.maghribLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
 
 
-        self.ishaFrame = customtkinter.CTkFrame(self.master, width=250, height=45)
+        self.ishaFrame = ctk.CTkFrame(self.master, width=250, height=45)
         self.ishaFrame.pack(side='top', pady=15)
         self.ishaFrame.grid_propagate(False)
 
-        self.ishaLabel = customtkinter.CTkLabel(self.ishaFrame, text = "Isha:", font = ("Roboto", 18))
-        self.ishaTime = customtkinter.CTkLabel(self.ishaFrame, text = self.timesParsed["isha"],  font = ("Roboto", 18))
+        self.ishaLabel = ctk.CTkLabel(self.ishaFrame, text = "Isha:", font = ("Roboto", 18))
+        self.ishaTime = ctk.CTkLabel(self.ishaFrame, text = self.timesParsed["isha"],  font = ("Roboto", 18))
         self.ishaLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
         self.ishaTime.grid(row=0, column = 5, padx = (123, 0), pady=9)
     
@@ -161,12 +162,13 @@ class prayerTimes(customtkinter.CTkFrame):
         self.timesParsed = json.load(jsonTimes)
         self.packTimes()
 
-    def goHome(self):
-        self.master.destroy()
+    def back_to_home(self):
+        self.taskbar.pack_forget()
+        self.titleLabel.pack_forget()
+        self.fajrFrame.pack_forget()
+        self.dhuhrFrame.pack_forget()  # Will clean this up and put these all into a single container when I'm not feeling lazy hehe
+        self.asrFrame.pack_forget()
+        self.maghribFrame.pack_forget()
+        self.ishaFrame.pack_forget()
 
-    def run(self):
-        self.master.mainloop()
-
-root = customtkinter.CTk()
-prayTimes = prayerTimes(root)
-prayTimes.run()
+        self.back_callback()
