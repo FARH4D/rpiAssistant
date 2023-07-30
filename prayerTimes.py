@@ -10,8 +10,6 @@ class prayerTimes(ctk.CTkFrame):
     def __init__(self, master, back_callback):
         
         super().__init__(master)
-        ctk.set_appearance_mode("dark")
-        ctk.set_default_color_theme("dark-blue")
         self.master = master
         self.back_callback = back_callback
         #self.master.attributes('-fullscreen', True)

@@ -8,8 +8,7 @@ from datetime import datetime, time
 import subprocess
 from intervalTimer import intervalTimer
 from prayerTimes import prayerTimes
-import sys
-import piir
+from deviceControl import deviceControl
 import Adafruit_DHT
 
 class home(ctk.CTkFrame):
@@ -101,27 +100,27 @@ class home(ctk.CTkFrame):
 ####################################################################################################
     def openTracker(self):
         self.returnFrom = 1
-        pass
 
     def openPrayer(self):
         self.cleanUp()
         self.returnFrom = 3
         self.prayerTimeContainer = prayerTimes(self.master, self.show_home_menu)
-        self.prayerTimeContainer.pack()
+        self.prayerTimeContainer.place(x = -3000, y = 0)
 
     def openInterval(self):
         self.cleanUp()
         self.returnFrom = 4
         self.intervalTimerContainer = intervalTimer(self.master, self.show_home_menu)
-        self.intervalTimerContainer.pack()
+        self.intervalTimerContainer.place(x = - 3000, y = 0)
 
     def openDevices(self):
+        self.cleanUp()
         self.returnFrom = 5
-        pass
+        self.deviceControlContainer = deviceControl(self.master, self.show_home_menu)
+        self.deviceControlContainer.place(x = -3000, y = 0)
         """ remote = piir.Remote('light.json', 27)
         remote.send('Power')
         print("Signal sent.") """
-
 
 
     def mapButtons(self):
