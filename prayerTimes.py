@@ -41,19 +41,19 @@ class prayerTimes(ctk.CTkFrame):
             self.requestData()
         except request.URLError as err: 
             print("No Internet connection")
-            self.wifiFrame = ctk.CTkFrame(self.master, width=250, height=45)
-            self.wifiFrame.pack(side='top', pady=15)
-            self.wifiFrame.grid_propagate(False)
+            self.errorFrame = ctk.CTkFrame(self.master, width=250, height=45)
+            self.errorFrame.pack(side='top', pady=15)
+            self.errorFrame.grid_propagate(False)
 
-            self.wifiLabel = ctk.CTkLabel(self.wifiFrame, text = "NO INTERNET CONNECTION.", font = ("Roboto", 18))
-            self.wifiLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+            self.errorLabel = ctk.CTkLabel(self.errorFrame, text = "NO INTERNET CONNECTION.", font = ("Roboto", 18))
+            self.errorLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
 
-            self.wifiFrame2 = ctk.CTkFrame(self.master, width=310, height=45)
-            self.wifiFrame2.pack(side='top', pady=20)
-            self.wifiFrame2.grid_propagate(False)
+            self.errorFrame2 = ctk.CTkFrame(self.master, width=310, height=45)
+            self.errorFrame2.pack(side='top', pady=20)
+            self.errorFrame2.grid_propagate(False)
 
-            self.wifiLabel2 = ctk.CTkLabel(self.wifiFrame2, text = "SHOWING LAST GATHERED TIMES.", font = ("Roboto", 18))
-            self.wifiLabel2.grid(row=0, column = 0, padx = (10, 0), pady=9)
+            self.errorLabel2 = ctk.CTkLabel(self.errorFrame2, text = "SHOWING LAST GATHERED TIMES.", font = ("Roboto", 18))
+            self.errorLabel2.grid(row=0, column = 0, padx = (10, 0), pady=9)
 
             self.master.after(4000, self.noInternet)
 
@@ -77,6 +77,15 @@ class prayerTimes(ctk.CTkFrame):
 
                 self.errorLabel = ctk.CTkLabel(errorFrame, text = "ERROR. API CALL FAILED.", font = ("Roboto", 18))
                 self.errorLabel.grid(row=0, column = 0, padx = (10, 0), pady=9)
+
+                self.errorFrame2 = ctk.CTkFrame(self.master, width=310, height=45)
+                self.errorFrame2.pack(side='top', pady=20)
+                self.errorFrame2.grid_propagate(False)
+
+                self.errorLabel2 = ctk.CTkLabel(self.errorFrame2, text = "SHOWING LAST GATHERED TIMES.", font = ("Roboto", 18))
+                self.errorLabel2.grid(row=0, column = 0, padx = (10, 0), pady=9)
+
+                self.master.after(4000, self.noInternet)
                 
             else:
                 with open ("prayerTimes.json", "w") as jsonTimes:
@@ -150,10 +159,10 @@ class prayerTimes(ctk.CTkFrame):
         self.ishaTime.grid(row=0, column = 5, padx = (123, 0), pady=9)
     
     def noInternet(self):
-        self.wifiLabel.destroy()
-        self.wifiFrame.destroy()
-        self.wifiLabel2.destroy()
-        self.wifiFrame2.destroy()
+        self.errorLabel.destroy()
+        self.errorFrame.destroy()
+        self.errorLabel2.destroy()
+        self.errorFrame2.destroy()
         print("Removed error labels")
 
         jsonTimes = open('prayerTimes.json')

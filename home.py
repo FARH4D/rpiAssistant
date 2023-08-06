@@ -99,7 +99,9 @@ class home(ctk.CTkFrame):
 #### Buttons for different menus
 ####################################################################################################
     def openTracker(self):
+        self.cleanUp()
         self.returnFrom = 1
+        
 
     def openPrayer(self):
         self.cleanUp()
@@ -121,7 +123,6 @@ class home(ctk.CTkFrame):
         """ remote = piir.Remote('light.json', 27)
         remote.send('Power')
         print("Signal sent.") """
-
 
     def mapButtons(self):
         self.button_mapping = {

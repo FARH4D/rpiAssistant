@@ -1,21 +1,31 @@
 import customtkinter as ctk
 from tkinter import *
 from datetime import datetime, time
-import piir
+from ledControl import ledControl
+from PyP100 import PyP100
 
 class deviceControl(ctk.CTkFrame):
 
     def __init__(self, master, back_callback):
         super().__init__(master)
-        ctk.set_appearance_mode("dark")
-        ctk.set_default_color_theme("dark-blue")
         self.master = master
         self.back_callback = back_callback
         #self.master.attributes('-fullscreen', True)
 
+        self.returnFrom = 0
+
+        self.device1 = PyP100.P100() # Makes a P100 plug object
+        self.device1.handshake() # Creates cookies so methods can be sent
+        self.device1.login() # Credentials are sent to the plug and AES key and IV are created so program is verified to send commands
+
+        self.device2 = PyP100.P100()
+        self.device2.handshake()
+        self.device2.login()
+
         self.packItems()
         self.update()
         self.createButtons()
+        self.mapButtons()
         
 
     def update(self):
@@ -49,6 +59,9 @@ class deviceControl(ctk.CTkFrame):
 
 
 
+
+
+
         self.rectFrame = ctk.CTkFrame(self.master, width=500, height=100)                   # HAVE CODE FOR RASPBERRY PI TEMPS
         self.rectFrame.pack(side='top', pady = '50')                                        # AND POSSIBLY CURRENT LOAD
         self.rectFrame.grid_propagate(False) # Prevents size of rectangle from being reduced when adding
@@ -58,26 +71,46 @@ class deviceControl(ctk.CTkFrame):
         self.buttonContainer = ctk.CTkFrame(self.master, height = 530, width = 500)
         self.buttonContainer.pack(side='top')
         
-        self.button1 = ctk.CTkButton(self.master, text="Device 1", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openTracker())
+        self.button1 = ctk.CTkButton(self.master, text="LED Lights\nOn/Off", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.device1.toggleState())
         self.button1.place(x = 130, y=90, in_= self.buttonContainer, anchor = "center")
-        self.button2 = ctk.CTkButton(self.master, text="Device 2", height = 130, width = 180, font = ("Roboto", 35))
+        self.button2 = ctk.CTkButton(self.master, text="LED Lights\nControl", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openLedControl())
         self.button2.place(x=370, y=90, in_= self.buttonContainer, anchor = "center")
 
-        self.button3 = ctk.CTkButton(self.master, text="Device 3", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openPrayer())
+        self.button3 = ctk.CTkButton(self.master, text="3D Printer\nOn/Off", height = 130, width = 180, font = ("Roboto", 35), command =lambda: self.device2.toggleState())
         self.button3.place(x=130, y=270, in_= self.buttonContainer, anchor = "center")
-        self.button4 = ctk.CTkButton(self.master, text="Device 4", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openDevices())
+        self.button4 = ctk.CTkButton(self.master, text="Device 3", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openDevices())
         self.button4.place(x=370, y=270, in_= self.buttonContainer, anchor = "center")
 
-        self.button5 = ctk.CTkButton(self.master, text="LED Lights\nPower", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openPrayer())
-        self.button5.place(x=130, y=450, in_= self.buttonContainer, anchor = "center")
-        self.button6 = ctk.CTkButton(self.master, text="Device 6", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openDevices())
-        self.button6.place(x=370, y=450, in_= self.buttonContainer, anchor = "center")
+        self.button5 = ctk.CTkButton(self.master, text="Reboot Wifi", height = 130, width = 400, font = ("Roboto", 35))
+        self.button5.place(x=235, y=430, in_= self.buttonContainer, anchor = "center")
+        self.button = ctk.CTkButton(self.master, text = "" )
 
+    def openLedControl(self):
+        self.cleanUp()
+        self.ledControlContainer = ledControl(self.master, self.show_home_menu)
+        self.ledControlContainer.place(x = -3000, y = 0)
 
+    def mapButtons(self):
+        self.button_mapping = {
+            1: 'ledControlContainer',
+            2: 'pcContainer'
+        }
 
+    def show_home_menu(self):
+        if self.returnFrom in self.button_mapping:
+            container_name = self.button_mapping[self.returnFrom]
+            container = getattr(self, container_name)
+            container.destroy()
+            
+        self.packItems()
+        self.update()
+        self.createButtons()
 
-    def back_to_home(self):
+    def cleanUp(self):
         self.taskbar.pack_forget()
         self.rectFrame.pack_forget()
         self.buttonContainer.pack_forget()
+
+    def back_to_home(self):
+        self.cleanUp()
         self.back_callback()
