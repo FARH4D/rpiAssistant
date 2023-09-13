@@ -57,16 +57,16 @@ class home(ctk.CTkFrame):
         self.greetingLabel.pack(side='top', pady=15)
 
  
-        # sensor = Adafruit_DHT.DHT11
-        # pin = 4
+        self.sensor = Adafruit_DHT.DHT11
+        self.pin = 4
 
-        # humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+        self.humidity, self.temperature = Adafruit_DHT.read_retry(self.sensor, self.pin)
 
-        # if humidity is not None and temperature is not None:
-        #     print(f"Temperature: {temperature}°C")
-        #     print(f"Humidity: {humidity}%")
-        # else:
-        #     print("Failed to retrieve data from DHT11 sensor.")
+        if self.humidity is not None and self.temperature is not None:
+             print(f"Temperature: {self.temperature}°C")
+             print(f"Humidity: {self.humidity}%")
+        else:
+             print("Failed to retrieve data from DHT11 sensor.")
         
 
 ####################################################################################################
@@ -77,11 +77,11 @@ class home(ctk.CTkFrame):
         self.rectFrame.pack(side='top', pady = '50')
         self.rectFrame.grid_propagate(False) # Prevents size of rectangle from being reduced when adding
 
-        # self.tempLabel = ctk.CTkLabel(self.rectFrame, text = f"Temperature:  {temperature}°C", font = ("Roboto", 30))
-        # self.humidLabel = ctk.CTkLabel(self.rectFrame, text = f"Humidity: {humidity}%", font = ("Roboto", 30))
+        self.tempLabel = ctk.CTkLabel(self.rectFrame, text = f"Temperature:  {self.temperature}°C", font = ("Roboto", 30))
+        self.humidLabel = ctk.CTkLabel(self.rectFrame, text = f"Humidity: {self.humidity}%", font = ("Roboto", 30))
 
-        # self.tempLabel.grid(row=0, column = 0, padx = (15,0), pady = (10,0))
-        # self.humidLabel.grid(row=1, column = 0)
+        self.tempLabel.grid(row=0, column = 0, padx = (15,0), pady = (10,0))
+        self.humidLabel.grid(row=1, column = 0)
 
     def update(self):
         now = datetime.now()
@@ -94,6 +94,10 @@ class home(ctk.CTkFrame):
         if (now.time() < time(12,00)): self.greetingLabel.configure(text="Good morning!")
         elif (now.time() >= time(12,00) and now.time() < time(18,30)): self.greetingLabel.configure(text="Good afternoon!")
         else: self.greetingLabel.configure(text="Good evening!")
+
+        self.humidity, self.temperature = Adafruit_DHT.read_retry(self.sensor, self.pin)
+        self.tempLabel.configure(text= f"Temperature:  {self.temperature}°C")
+        self.humidLabel.configure(text= f"Humidity: {self.humidity}%")
 
 ####################################################################################################
 #### Buttons for different menus
@@ -119,10 +123,7 @@ class home(ctk.CTkFrame):
         self.cleanUp()
         self.returnFrom = 5
         self.deviceControlContainer = deviceControl(self.master, self.show_home_menu)
-        self.deviceControlContainer.place(x = -3000, y = 0)
-        """ remote = piir.Remote('light.json', 27)
-        remote.send('Power')
-        print("Signal sent.") """
+        self.deviceControlContainer.place(x = - 3000, y = 0)
 
     def mapButtons(self):
         self.button_mapping = {
@@ -157,8 +158,8 @@ class home(ctk.CTkFrame):
         self.deviceButton = ctk.CTkButton(self.master, text="Device\nControl", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openDevices())
         self.deviceButton.place(x=370, y=270, in_= self.buttonContainer, anchor = "center")
 
-        self.intervalButton = ctk.CTkButton(self.master, text="Interval Timer", height = 100, width = 400, font = ("Roboto", 35), command=lambda: self.openInterval())
-        self.intervalButton.place(x=235, y=430, in_= self.buttonContainer, anchor = "center")
+        self.intervalButton = ctk.CTkButton(self.master, text="Interval Timer", height = 100, width = 430, font = ("Roboto", 35), command=lambda: self.openInterval())
+        self.intervalButton.place(x=250, y=430, in_= self.buttonContainer, anchor = "center")
 
     def cleanUp(self):
         self.taskbar.pack_forget()

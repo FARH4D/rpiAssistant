@@ -14,11 +14,11 @@ class deviceControl(ctk.CTkFrame):
 
         self.returnFrom = 0
 
-        self.device1 = PyP100.P100() # Makes a P100 plug object
+        self.device1 = PyP100.P100("", "", "") # Makes a P100 plug object. Enter (device ip, username, password) as parameters
         self.device1.handshake() # Creates cookies so methods can be sent
         self.device1.login() # Credentials are sent to the plug and AES key and IV are created so program is verified to send commands
 
-        self.device2 = PyP100.P100()
+        self.device2 = PyP100.P100("", "", "")
         self.device2.handshake()
         self.device2.login()
 
@@ -61,7 +61,6 @@ class deviceControl(ctk.CTkFrame):
 
 
 
-
         self.rectFrame = ctk.CTkFrame(self.master, width=500, height=100)                   # HAVE CODE FOR RASPBERRY PI TEMPS
         self.rectFrame.pack(side='top', pady = '50')                                        # AND POSSIBLY CURRENT LOAD
         self.rectFrame.grid_propagate(False) # Prevents size of rectangle from being reduced when adding
@@ -78,12 +77,11 @@ class deviceControl(ctk.CTkFrame):
 
         self.button3 = ctk.CTkButton(self.master, text="3D Printer\nOn/Off", height = 130, width = 180, font = ("Roboto", 35), command =lambda: self.device2.toggleState())
         self.button3.place(x=130, y=270, in_= self.buttonContainer, anchor = "center")
-        self.button4 = ctk.CTkButton(self.master, text="Device 3", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.openDevices())
+        self.button4 = ctk.CTkButton(self.master, text="Light\nOn/Off", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.device2.toggleState())
         self.button4.place(x=370, y=270, in_= self.buttonContainer, anchor = "center")
 
-        self.button5 = ctk.CTkButton(self.master, text="Reboot Wifi", height = 130, width = 400, font = ("Roboto", 35))
-        self.button5.place(x=235, y=430, in_= self.buttonContainer, anchor = "center")
-        self.button = ctk.CTkButton(self.master, text = "" )
+        self.button5 = ctk.CTkButton(self.master, text="PC Statistics", height = 130, width = 40, font = ("Roboto", 35))
+        self.button5.place(x=250, y=430, in_= self.buttonContainer, anchor = "center")
 
     def openLedControl(self):
         self.cleanUp()

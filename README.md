@@ -3,7 +3,7 @@ My raspberry pi home assistant project I use in my bedroom for a vertical 7 inch
 
 Uses customtkinter as well as several other libraries such as Adafruit_DHT and gpio-ir.
 
-My home assistant has a DHT11 for checking my room's humidity and temperature, an IR receiver (for registering new remotes) and an IR emitter for sending signals such as controlling my LED strip lights.
+My home assistant has a DHT11 for checking my room's humidity and temperature, an IR receiver (for registering new remotes or signals) and an IR emitter for sending signals such as controlling my LED strip lights.
 
 
 # APIs for controlling devices:
