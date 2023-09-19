@@ -1,7 +1,8 @@
 import customtkinter as ctk
 from tkinter import *
 from datetime import datetime, time
-from ledControl import ledControl
+from deviceControl.ledControl import ledControl
+from deviceControl.pcStatistics import pcStatistics
 from PyP100 import PyP100
 
 class deviceControl(ctk.CTkFrame):
@@ -80,18 +81,25 @@ class deviceControl(ctk.CTkFrame):
         self.button4 = ctk.CTkButton(self.master, text="Light\nOn/Off", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.device2.toggleState())
         self.button4.place(x=370, y=270, in_= self.buttonContainer, anchor = "center")
 
-        self.button5 = ctk.CTkButton(self.master, text="PC Statistics", height = 130, width = 40, font = ("Roboto", 35))
+        self.button5 = ctk.CTkButton(self.master, text="PC Statistics", height = 130, width = 40, font = ("Roboto", 35), command=lambda: self.openPcStats())
         self.button5.place(x=250, y=430, in_= self.buttonContainer, anchor = "center")
 
     def openLedControl(self):
         self.cleanUp()
+        self.returnFrom = 1
         self.ledControlContainer = ledControl(self.master, self.show_home_menu)
         self.ledControlContainer.place(x = -3000, y = 0)
+
+    def openPcStats(self):
+        self.cleanUp()
+        self.returnFrom = 2
+        self.pcStatsContainer = pcStatistics(self.master, self.show_home_menu)
+        self.pcStatsContainer.place(x = -3000, y = 0)
 
     def mapButtons(self):
         self.button_mapping = {
             1: 'ledControlContainer',
-            2: 'pcContainer'
+            2: 'pcStatsContainer'
         }
 
     def show_home_menu(self):

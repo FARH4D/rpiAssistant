@@ -62,7 +62,7 @@ class ledControl(ctk.CTkFrame):
 
         self.button3 = ctk.CTkButton(self.master, text="Blue", height = 130, width = 180, font = ("Roboto", 35), command =lambda: self.blue())
         self.button3.place(x=130, y=430, in_= self.buttonContainer, anchor = "center")
-        self.button4 = ctk.CTkButton(self.master, text="Off", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.power())
+        self.button4 = ctk.CTkButton(self.master, text="On/Off", height = 130, width = 180, font = ("Roboto", 35), command=lambda: self.power())
         self.button4.place(x=370, y=430, in_= self.buttonContainer, anchor = "center")
 
 

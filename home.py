@@ -6,9 +6,9 @@ import customtkinter as ctk
 from tkinter import *
 from datetime import datetime, time
 import subprocess
-from intervalTimer import intervalTimer
-from prayerTimes import prayerTimes
-from deviceControl import deviceControl
+from intervalTimer.intervalTimer import intervalTimer
+from prayerTimes.prayerTimes import prayerTimes
+from deviceControl.deviceControl import deviceControl
 import Adafruit_DHT
 
 class home(ctk.CTkFrame):
@@ -17,7 +17,7 @@ class home(ctk.CTkFrame):
 #### Set properties of window
 ####################################################################################################
     def __init__(self, master):
-        super().__init__(master) ## Initializes the constructor of the master class (CTK Frame and allows it to be changed)
+        super().__init__(master) # Initializes the constructor of the master class (CTK Frame and allows it to be updated by the code in this file)
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("dark-blue")
 
